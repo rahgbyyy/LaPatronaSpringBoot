@@ -15,16 +15,16 @@ import lombok.AllArgsConstructor;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRol;
+    private Long idrol;
     private String nombre;
     private String descripcion;
 
     public Long getIdRol() {
-        return idRol;
+        return idrol;
     }
 
     public void setIdRol(Long idRol) {
-        this.idRol = idRol;
+        this.idrol = idRol;
     }
 
     public String getNombre() {
