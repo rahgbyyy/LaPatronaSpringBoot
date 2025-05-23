@@ -28,6 +28,9 @@ public class Usuario {
     private String telefono;
     private Date fechaingreso;
     private double sueldo;
+    @ManyToOne
+    @JoinColumn(name = "idrol", referencedColumnName = "idrol")
+    private Rol rol;
     @Column(nullable = true)
     private Date fechaeliminado;
 
@@ -133,5 +136,13 @@ public class Usuario {
 
     public void setFechaeliminado(Date fechaeliminado) {
         this.fechaeliminado = fechaeliminado;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 }

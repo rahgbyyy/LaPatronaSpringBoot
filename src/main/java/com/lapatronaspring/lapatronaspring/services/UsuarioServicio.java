@@ -2,7 +2,9 @@ package com.lapatronaspring.lapatronaspring.services;
 
 import com.lapatronaspring.lapatronaspring.models.Usuario;
 import com.lapatronaspring.lapatronaspring.models.UsuarioDTO;
+import com.lapatronaspring.lapatronaspring.models.Rol;
 import com.lapatronaspring.lapatronaspring.repositories.UsuarioRepositorio;
+import com.lapatronaspring.lapatronaspring.repositories.RolRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ public class UsuarioServicio {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private RolRepositorio rolRepositorio;
 
     public Usuario crearUsuario(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
@@ -31,6 +35,16 @@ public class UsuarioServicio {
         usuario.setSueldo(usuarioDTO.getSueldo());
         usuario.setFechaeliminado(usuarioDTO.getFechaeliminado());
 
+        // Manejo de la relación con Rol
+        if(usuarioDTO.getIdrol() != null) {
+            Optional<Rol> rolOptional = rolRepositorio.findById(usuarioDTO.getIdrol());
+            if(rolOptional.isPresent()) {
+                usuario.setRol(rolOptional.get());
+            } else {
+                throw new IllegalArgumentException("El rol con ID " + usuarioDTO.getIdrol() + " no existe");
+            }
+        }
+
         return usuarioRepositorio.save(usuario);
     }
 
@@ -46,6 +60,7 @@ public class UsuarioServicio {
         Optional<Usuario> usuarioOptional = usuarioRepositorio.findById(idUsuario);
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
+            // Actualización de campos básicos
             usuario.setNombre(usuarioDTO.getNombre());
             usuario.setApellido(usuarioDTO.getApellido());
             usuario.setEstado(usuarioDTO.isEstado());
@@ -58,6 +73,18 @@ public class UsuarioServicio {
             usuario.setFechaingreso(usuarioDTO.getFechaingreso());
             usuario.setSueldo(usuarioDTO.getSueldo());
             usuario.setFechaeliminado(usuarioDTO.getFechaeliminado());
+
+            // Actualización del rol
+            if(usuarioDTO.getIdrol() != null) {
+                Optional<Rol> rolOptional = rolRepositorio.findById(usuarioDTO.getIdrol());
+                if(rolOptional.isPresent()) {
+                    usuario.setRol(rolOptional.get());
+                } else {
+                    throw new IllegalArgumentException("El rol con ID " + usuarioDTO.getIdrol() + " no existe");
+                }
+            } else {
+                usuario.setRol(null);
+            }
 
             usuarioRepositorio.save(usuario);
             return true;
@@ -73,7 +100,6 @@ public class UsuarioServicio {
         return false;
     }
 
-    // Método adicional para desactivar usuario (cambiar estado)
     public boolean desactivarUsuario(Long idUsuario) {
         Optional<Usuario> usuarioOptional = usuarioRepositorio.findById(idUsuario);
         if (usuarioOptional.isPresent()) {
@@ -85,4 +111,5 @@ public class UsuarioServicio {
         }
         return false;
     }
+
 }

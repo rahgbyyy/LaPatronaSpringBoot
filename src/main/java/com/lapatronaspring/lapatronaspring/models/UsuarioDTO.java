@@ -24,6 +24,8 @@ public class UsuarioDTO {
     private Date fechaingreso;
     private double sueldo;
     private Date fechaeliminado;
+    private Long idrol;
+
 
 
     public String getNombre() {
@@ -120,5 +122,13 @@ public class UsuarioDTO {
 
     public void setFechaeliminado(Date fechaeliminado) {
         this.fechaeliminado = fechaeliminado;
+    }
+
+    public Long getIdrol() {
+        return idrol;
+    }
+
+    public void setIdrol(Long idrol) {
+        this.idrol = idrol;
     }
 }
