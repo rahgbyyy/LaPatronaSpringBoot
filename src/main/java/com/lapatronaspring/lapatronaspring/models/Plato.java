@@ -37,4 +37,84 @@ public class Plato {
     @ManyToOne
     @JoinColumn(name = "idCategoria", nullable = false)
     private CategoriaPlato categoriaPlato;
+
+    public Long getIdPlato() {
+        return idPlato;
+    }
+
+    public void setIdPlato(Long idPlato) {
+        this.idPlato = idPlato;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public String getImgRuta() {
+        return imgRuta;
+    }
+
+    public void setImgRuta(String imgRuta) {
+        this.imgRuta = imgRuta;
+    }
+
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public LocalDateTime getFechaEliminado() {
+        return fechaEliminado;
+    }
+
+    public void setFechaEliminado(LocalDateTime fechaEliminado) {
+        this.fechaEliminado = fechaEliminado;
+    }
+
+    public CategoriaPlato getCategoriaPlato() {
+        return categoriaPlato;
+    }
+
+    public void setCategoriaPlato(CategoriaPlato categoriaPlato) {
+        this.categoriaPlato = categoriaPlato;
+    }
 }

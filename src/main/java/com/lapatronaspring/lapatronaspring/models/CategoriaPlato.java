@@ -17,5 +17,20 @@ public class CategoriaPlato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCategoriaPlato;
     private String nombre;
-    
+
+    public Long getIdCategoriaPlato() {
+        return idCategoriaPlato;
+    }
+
+    public void setIdCategoriaPlato(Long idCategoriaPlato) {
+        this.idCategoriaPlato = idCategoriaPlato;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }
