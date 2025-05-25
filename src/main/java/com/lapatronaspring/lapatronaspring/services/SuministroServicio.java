@@ -1,4 +1,5 @@
 package com.lapatronaspring.lapatronaspring.services;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lapatronaspring.lapatronaspring.models.Categoria;
+import com.lapatronaspring.lapatronaspring.models.PlatoDTO;
 import com.lapatronaspring.lapatronaspring.models.Suministro;
 import com.lapatronaspring.lapatronaspring.models.SuministroDTO;
 import com.lapatronaspring.lapatronaspring.repositories.CategoriaRepositorio;
 import com.lapatronaspring.lapatronaspring.repositories.SuministroRepositorio;
+
 @Service
 public class SuministroServicio {
 
@@ -18,15 +21,15 @@ public class SuministroServicio {
     private SuministroRepositorio suministroRepositorio;
     @Autowired
     private CategoriaRepositorio categoriaRepositorio;
- 
+
     public boolean crear(SuministroDTO dto) {
 
         Optional<Categoria> categoriaOpt = categoriaRepositorio.findById(dto.getIdCategoria());
         if (!categoriaOpt.isPresent()) {
             throw new RuntimeException("Categoría no encontrada");
         }
-       
-        //mapeo
+
+        // mapeo
         Suministro suministro = new Suministro();
         suministro.setNombre(dto.getNombre());
         suministro.setStock(dto.getStock());
@@ -38,21 +41,28 @@ public class SuministroServicio {
         suministro = suministroRepositorio.save(suministro);
         return true;
 
-        
     }
 
     // Obtener todos
     public List<SuministroDTO> obtenerTodos() {
         return suministroRepositorio.findAll()
-            .stream()
-            .map(this::toDTO) //
-            .collect(Collectors.toList());
+                .stream()
+                .map(this::toDTO) //
+                .collect(Collectors.toList());
+    }
+
+    public List<SuministroDTO> obtenerTodosActivos() {
+        return suministroRepositorio.findAll()
+                .stream()
+                .filter(p -> Boolean.TRUE.equals(p.getEstado())) // estado == true
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     // Obtener por ID
     public Optional<SuministroDTO> obtenerPorId(Long id) {
         return suministroRepositorio.findById(id)
-            .map(this::toDTO);
+                .map(this::toDTO);
     }
 
     // Actualizar
@@ -85,32 +95,31 @@ public class SuministroServicio {
         return false;
     }
 
-    public boolean cambiarEstado(Long id, boolean estado){
+    public boolean cambiarEstado(Long id, boolean estado) {
         Optional<Suministro> suministroOpt = suministroRepositorio.findById(id);
-        if(suministroOpt.isPresent()){
+        if (suministroOpt.isPresent()) {
             Suministro suministro = suministroOpt.get();
             suministro.setEstado(estado);
             suministroRepositorio.save(suministro);
             return true;
 
-        }
-        else{
+        } else {
             return false;
         }
 
     }
 
-    //mapeo
+    // mapeo
     private SuministroDTO toDTO(Suministro s) {
         SuministroDTO dto = new SuministroDTO();
         dto.setIdSuministro(s.getIdSuministro());
         dto.setNombre(s.getNombre());
         dto.setStock(s.getStock());
         dto.setUnidad(s.getUnidad());
-        dto.setEstado(s.isEstado());
+        dto.setEstado(s.getEstado());
         dto.setFechaEliminado(s.getFechaEliminado());
         dto.setIdCategoria(s.getCategoria().getIdCategoria());
-        dto.setCategoria(s.getCategoria().getNombre()); 
+        dto.setCategoria(s.getCategoria().getNombre());
         return dto;
     }
 

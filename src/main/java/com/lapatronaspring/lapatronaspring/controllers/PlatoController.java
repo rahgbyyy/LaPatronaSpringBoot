@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/platos")
 public class PlatoController {
@@ -30,9 +31,16 @@ public class PlatoController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<PlatoDTO>> obtenerTodos() {
         List<PlatoDTO> platos = platoServicio.obtenerTodos();
+        return ResponseEntity.ok(platos);
+    }
+
+    
+    @GetMapping("/activos")
+    public ResponseEntity<List<PlatoDTO>> obtenerTodosActivos() {
+        List<PlatoDTO> platos = platoServicio.obtenerTodosActivos();
         return ResponseEntity.ok(platos);
     }
 

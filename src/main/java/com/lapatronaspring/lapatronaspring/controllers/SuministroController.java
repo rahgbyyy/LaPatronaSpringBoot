@@ -13,6 +13,8 @@ import java.util.Optional;
 
 import com.lapatronaspring.lapatronaspring.models.ResponseCommonDTO;
 
+
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/suministros")
 public class SuministroController {
@@ -33,11 +35,18 @@ public class SuministroController {
 
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<SuministroDTO>> obtenerTodos() {
         List<SuministroDTO> suministros = suministroService.obtenerTodos();
         return ResponseEntity.ok(suministros);
     }
+
+    @GetMapping("/activos")
+    public ResponseEntity<List<SuministroDTO>> obtenerTodosActivos() {
+        List<SuministroDTO> suministros = suministroService.obtenerTodosActivos();
+        return ResponseEntity.ok(suministros);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<SuministroDTO> obtenerPorId(@PathVariable Long id) {

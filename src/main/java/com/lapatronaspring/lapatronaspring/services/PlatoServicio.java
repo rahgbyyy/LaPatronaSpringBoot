@@ -22,7 +22,7 @@ public class PlatoServicio {
 
     // Crear plato
     public boolean crear(PlatoDTO dto) {
-        Optional<CategoriaPlato> categoriaOpt = categoriaPlatoRepositorio.findById(dto.getIdCategoriaPlato());
+        Optional<CategoriaPlato> categoriaOpt = categoriaPlatoRepositorio.findById(dto.getIdCategoria());
         if (!categoriaOpt.isPresent()) {
             throw new RuntimeException("Categoría no encontrada");
         }
@@ -49,6 +49,13 @@ public class PlatoServicio {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
+   public List<PlatoDTO> obtenerTodosActivos() {
+    return platoRepositorio.findAll()
+            .stream()
+            .filter(plato -> Boolean.TRUE.equals(plato.isEstado())) // estado == true
+            .map(this::toDTO)
+            .collect(Collectors.toList());
+}
 
     // Obtener plato por ID
     public Optional<PlatoDTO> obtenerPorId(Long id) {
@@ -59,7 +66,7 @@ public class PlatoServicio {
     // Actualizar plato
     public boolean actualizar(Long id, PlatoDTO dto) {
         Optional<Plato> platoOpt = platoRepositorio.findById(id);
-        Optional<CategoriaPlato> categoriaOpt = categoriaPlatoRepositorio.findById(dto.getIdCategoriaPlato());
+        Optional<CategoriaPlato> categoriaOpt = categoriaPlatoRepositorio.findById(dto.getIdCategoria());
 
         if (platoOpt.isPresent() && categoriaOpt.isPresent()) {
             Plato plato = platoOpt.get();

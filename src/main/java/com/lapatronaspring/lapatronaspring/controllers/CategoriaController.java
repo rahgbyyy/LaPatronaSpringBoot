@@ -5,6 +5,7 @@ import com.lapatronaspring.lapatronaspring.services.CategoriaServicio;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("api/categorias")
 public class CategoriaController {

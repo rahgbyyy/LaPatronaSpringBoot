@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.lapatronaspring.lapatronaspring.models.CategoriaPlato;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("api/categoriasPlato")
 public class CategoriaPlatoController {

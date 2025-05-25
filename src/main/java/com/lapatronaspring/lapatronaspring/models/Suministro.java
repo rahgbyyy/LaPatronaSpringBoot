@@ -29,7 +29,7 @@ public class Suministro {
     @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria")
     private Categoria categoria;
 
-    public boolean isEstado() {
+    public boolean getEstado() {
         return estado;
     }
     
