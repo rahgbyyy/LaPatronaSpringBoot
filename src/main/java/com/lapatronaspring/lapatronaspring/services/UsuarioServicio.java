@@ -6,6 +6,7 @@ import com.lapatronaspring.lapatronaspring.models.Rol;
 import com.lapatronaspring.lapatronaspring.repositories.UsuarioRepositorio;
 import com.lapatronaspring.lapatronaspring.repositories.RolRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,13 +20,21 @@ public class UsuarioServicio {
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private RolRepositorio rolRepositorio;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;  // Inyectar el encoder
 
     public Usuario crearUsuario(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setApellido(usuarioDTO.getApellido());
         usuario.setEstado(usuarioDTO.isEstado());
-        usuario.setPassword(usuarioDTO.getPassword());
+
+        // Encriptar la contraseña antes de setearla
+        String encodedPassword = passwordEncoder.encode(usuarioDTO.getPassword());
+        usuario.setPassword(encodedPassword);
+        System.out.println("Contraseña codificada: " + encodedPassword);
+
         usuario.setCodigo(usuarioDTO.getCodigo());
         usuario.setTipodoc(usuarioDTO.getTipodoc());
         usuario.setDocumento(usuarioDTO.getDocumento());
@@ -35,10 +44,9 @@ public class UsuarioServicio {
         usuario.setSueldo(usuarioDTO.getSueldo());
         usuario.setFechaeliminado(usuarioDTO.getFechaeliminado());
 
-        // Manejo de la relación con Rol
-        if(usuarioDTO.getIdrol() != null) {
+        if (usuarioDTO.getIdrol() != null) {
             Optional<Rol> rolOptional = rolRepositorio.findById(usuarioDTO.getIdrol());
-            if(rolOptional.isPresent()) {
+            if (rolOptional.isPresent()) {
                 usuario.setRol(rolOptional.get());
             } else {
                 throw new IllegalArgumentException("El rol con ID " + usuarioDTO.getIdrol() + " no existe");
@@ -47,7 +55,6 @@ public class UsuarioServicio {
 
         return usuarioRepositorio.save(usuario);
     }
-
     public List<Usuario> obtenerTodosUsuarios() {
         return usuarioRepositorio.findAll();
     }
