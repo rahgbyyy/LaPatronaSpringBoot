@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/roles")
 public class RolController {
     @Autowired
@@ -22,7 +23,7 @@ public class RolController {
         return"Rol creado";
     }
 
-    @GetMapping
+    @GetMapping("/lista")
     public ResponseEntity<List<Rol>> obtenerTodos() {
         return ResponseEntity.ok(rolServicio.obtenerTodos());
     }

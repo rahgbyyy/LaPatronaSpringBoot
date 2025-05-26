@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/api/usuario")
 public class UsuarioController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioCreado);
     }
 
-    @GetMapping
+    @GetMapping("/activos")
     public ResponseEntity<List<Usuario>> obtenerTodosUsuarios() {
         return ResponseEntity.ok(usuarioServicio.obtenerTodosUsuarios());
     }

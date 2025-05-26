@@ -37,7 +37,7 @@ public PasswordEncoder passwordEncoder() {
         provider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(List.of(provider));
     }
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -47,4 +47,7 @@ public PasswordEncoder passwordEncoder() {
             .formLogin(form -> form.disable());
         return http.build();
     }
+
+
+
 }
