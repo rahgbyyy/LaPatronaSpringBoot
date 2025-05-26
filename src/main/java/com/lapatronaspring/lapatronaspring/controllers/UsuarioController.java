@@ -17,7 +17,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
-    @PostMapping("/crearusuario")
+    @PostMapping("/guardar")
     public ResponseEntity<Usuario> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuarioCreado = usuarioServicio.crearUsuario(usuarioDTO);
         return ResponseEntity.ok(usuarioCreado);
@@ -35,7 +35,7 @@ public class UsuarioController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{idUsuario}")
+    @PutMapping("actualizar/{idUsuario}")
     public ResponseEntity<String> actualizarUsuario(@PathVariable Long idUsuario,
                                                     @RequestBody UsuarioDTO usuarioDTO) {
         if (usuarioServicio.actualizarUsuario(idUsuario, usuarioDTO)) {
