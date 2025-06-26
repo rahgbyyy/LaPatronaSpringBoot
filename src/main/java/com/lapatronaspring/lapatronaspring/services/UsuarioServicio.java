@@ -20,6 +20,8 @@ public class UsuarioServicio {
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private RolRepositorio rolRepositorio;
+    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private JwtUtil jwtUtil;
     
     @Autowired
     private PasswordEncoder passwordEncoder;  // Inyectar el encoder
@@ -118,5 +120,30 @@ public class UsuarioServicio {
         }
         return false;
     }
+ public LoginResponse login(LoginRequest request) {
+        Usuario usuarioDTO = usuarioRepositorio.findByCodigo(request.getCodigo())
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        if (!passwordEncoder.matches(request.getPassword(), usuarioDTO.getPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        // Genera el token
+        String token = jwtUtil.generateToken(usuarioDTO.getCodigo());
+
+        // Prepara el UsuarioDTO (sin la contraseña)
+        UsuarioDTO usuario = new UsuarioDTO();
+            usuario.setNombre(usuarioDTO.getNombre());
+            usuario.setApellido(usuarioDTO.getApellido());
+            usuario.setEstado(usuarioDTO.isEstado());
+            usuario.setCodigo(usuarioDTO.getCodigo());
+            usuario.setTipodoc(usuarioDTO.getTipodoc());
+            usuario.setDocumento(usuarioDTO.getDocumento());
+            usuario.setCorreo(usuarioDTO.getCorreo());
+            usuario.setTelefono(usuarioDTO.getTelefono());
+            usuario.setFechaingreso(usuarioDTO.getFechaingreso());
+            usuario.setSueldo(usuarioDTO.getSueldo());
+            usuario.setFechaeliminado(usuarioDTO.getFechaeliminado());
+        return new LoginResponse(token, dto);
+    }
 }
