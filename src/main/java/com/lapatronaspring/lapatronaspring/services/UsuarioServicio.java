@@ -1,8 +1,7 @@
 package com.lapatronaspring.lapatronaspring.services;
 
-import com.lapatronaspring.lapatronaspring.models.Usuario;
-import com.lapatronaspring.lapatronaspring.models.UsuarioDTO;
-import com.lapatronaspring.lapatronaspring.models.Rol;
+import com.lapatronaspring.lapatronaspring.config.JwtUtil;
+import com.lapatronaspring.lapatronaspring.models.*;
 import com.lapatronaspring.lapatronaspring.repositories.UsuarioRepositorio;
 import com.lapatronaspring.lapatronaspring.repositories.RolRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,7 @@ public class UsuarioServicio {
     private RolRepositorio rolRepositorio;
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private JwtUtil jwtUtil;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;  // Inyectar el encoder
+
 
     public Usuario crearUsuario(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
@@ -137,13 +134,7 @@ public class UsuarioServicio {
             usuario.setApellido(usuarioDTO.getApellido());
             usuario.setEstado(usuarioDTO.isEstado());
             usuario.setCodigo(usuarioDTO.getCodigo());
-            usuario.setTipodoc(usuarioDTO.getTipodoc());
-            usuario.setDocumento(usuarioDTO.getDocumento());
-            usuario.setCorreo(usuarioDTO.getCorreo());
-            usuario.setTelefono(usuarioDTO.getTelefono());
-            usuario.setFechaingreso(usuarioDTO.getFechaingreso());
-            usuario.setSueldo(usuarioDTO.getSueldo());
-            usuario.setFechaeliminado(usuarioDTO.getFechaeliminado());
-        return new LoginResponse(token, dto);
+            
+        return new LoginResponse(token, usuario);
     }
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Data // Genera getters, setters, toString, equals y hashCode
 @NoArgsConstructor // Genera un constructor sin argumentos
-@AllArgsConstructor // Genera un constructor con todos los argumentos
 public class LoginRequest {
 
 public String codigo;

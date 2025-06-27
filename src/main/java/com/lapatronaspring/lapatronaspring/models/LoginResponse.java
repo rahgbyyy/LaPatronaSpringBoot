@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 
 @Data // Genera getters, setters, toString, equals y hashCode
 @NoArgsConstructor // Genera un constructor sin argumentos
-@AllArgsConstructor // Genera un constructor con todos los argumentos
-public class JwtResponseDTO {
+
+public class LoginResponse {
     private String token;
     private UsuarioDTO usuario;
-    public LoginResponse(String token, UsuarioDTO usuario){
+
+    public LoginResponse(String token, UsuarioDTO usuario) {
         this.token = token;
         this.usuario = usuario;
-        }
-
-    public String getToken() {return token;}
-    public UsuarioDTO getUsuario() {return usuario;}     
+    }
+    public String getToken() { return token; }
+    public UsuarioDTO getUsuario() { return usuario; }
 }

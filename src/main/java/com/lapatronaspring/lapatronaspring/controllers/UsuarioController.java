@@ -1,13 +1,17 @@
 package com.lapatronaspring.lapatronaspring.controllers;
 
+import com.lapatronaspring.lapatronaspring.models.LoginRequest;
+import com.lapatronaspring.lapatronaspring.models.LoginResponse;
 import com.lapatronaspring.lapatronaspring.models.Usuario;
 import com.lapatronaspring.lapatronaspring.models.UsuarioDTO;
 import com.lapatronaspring.lapatronaspring.services.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
