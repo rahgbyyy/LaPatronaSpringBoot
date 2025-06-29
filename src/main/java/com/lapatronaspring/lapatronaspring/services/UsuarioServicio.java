@@ -118,23 +118,25 @@ public class UsuarioServicio {
         return false;
     }
  public LoginResponse login(LoginRequest request) {
-        Usuario usuarioDTO = usuarioRepositorio.findByCodigo(request.getCodigo())
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+     Usuario usuario = usuarioRepositorio.findByCodigo(request.getCodigo())
+             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        if (!passwordEncoder.matches(request.getPassword(), usuarioDTO.getPassword())) {
-            throw new RuntimeException("Contraseña incorrecta");
-        }
+     if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
+         throw new RuntimeException("Contraseña incorrecta");
+     }
 
-        // Genera el token
-        String token = jwtUtil.generateToken(usuarioDTO.getCodigo());
+     String token = jwtUtil.generateToken(usuario.getCodigo(), usuario.getIdusuario());
 
-        // Prepara el UsuarioDTO (sin la contraseña)
-        UsuarioDTO usuario = new UsuarioDTO();
-            usuario.setNombre(usuarioDTO.getNombre());
-            usuario.setApellido(usuarioDTO.getApellido());
-            usuario.setEstado(usuarioDTO.isEstado());
-            usuario.setCodigo(usuarioDTO.getCodigo());
-            
-        return new LoginResponse(token, usuario);
-    }
+     UsuarioLoginDTO usuarioLogin = new UsuarioLoginDTO();
+     usuarioLogin.setIdUsuario(usuario.getIdusuario());
+     usuarioLogin.setNombre(usuario.getNombre());
+     usuarioLogin.setApellido(usuario.getApellido());
+     usuarioLogin.setCodigo(usuario.getCodigo());
+     usuarioLogin.setEstado(usuario.isEstado());
+     usuarioLogin.setIdrol(usuario.getRol().getIdRol());
+     usuarioLogin.setRol(usuario.getRol().getNombre());
+
+     return new LoginResponse(token, usuarioLogin);
+
+ }
 }

@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 
 public class LoginResponse {
     private String token;
-    private UsuarioDTO usuario;
+    private UsuarioLoginDTO usuario;
 
-    public LoginResponse(String token, UsuarioDTO usuario) {
+
+    public LoginResponse(String token, UsuarioLoginDTO usuario) {
         this.token = token;
         this.usuario = usuario;
     }
     public String getToken() { return token; }
-    public UsuarioDTO getUsuario() { return usuario; }
+    public UsuarioLoginDTO getUsuario() { return usuario; }
 }

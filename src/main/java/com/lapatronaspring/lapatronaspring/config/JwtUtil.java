@@ -17,9 +17,10 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String codigo) {
+    public String generateToken(String codigo, Long idUsuario) {
         return Jwts.builder()
                 .setSubject(codigo)
+                .claim("id", idUsuario) // aquí agregas el ID como claim
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
