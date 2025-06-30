@@ -2,6 +2,7 @@ package com.lapatronaspring.lapatronaspring.controllers;
 
 import com.lapatronaspring.lapatronaspring.models.LoginRequest;
 import com.lapatronaspring.lapatronaspring.models.LoginResponse;
+import com.lapatronaspring.lapatronaspring.models.ResponseCommonDTO;
 import com.lapatronaspring.lapatronaspring.models.Usuario;
 import com.lapatronaspring.lapatronaspring.models.UsuarioDTO;
 import com.lapatronaspring.lapatronaspring.services.UsuarioServicio;
@@ -40,10 +41,11 @@ public class UsuarioController {
     }
 
     @PutMapping("actualizar/{idUsuario}")
-    public ResponseEntity<String> actualizarUsuario(@PathVariable Long idUsuario,
+    public ResponseEntity<ResponseCommonDTO> actualizarUsuario(@PathVariable Long idUsuario,
                                                     @RequestBody UsuarioDTO usuarioDTO) {
         if (usuarioServicio.actualizarUsuario(idUsuario, usuarioDTO)) {
-            return ResponseEntity.ok("Usuario actualizado exitosamente");
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseCommonDTO(true, "Usuario actualizado correctamente"));
         }
         return ResponseEntity.notFound().build();
     }
