@@ -26,6 +26,8 @@ public class PedidoServicio {
     @Autowired
     private PlatoRepositorio platoRepository;
 
+
+
     // 1. Crear pedido
     @Transactional
     public PedidoDTO crearPedido(PedidoDTO pedidoDTO) {
@@ -36,7 +38,7 @@ public class PedidoServicio {
         // Crear el pedido
         Pedido pedido = new Pedido();
         pedido.setEstado(true);
-        pedido.setEstadoPedido("PENDIENTE"); // Estado inicial
+        pedido.setEstadoPedido("ENVIADO"); // Estado inicial
         pedido.setMonto(pedidoDTO.getMonto());
         pedido.setFechaRegistro(LocalDateTime.now());
         pedido.setUltModificacion(LocalDateTime.now());
@@ -44,7 +46,8 @@ public class PedidoServicio {
         pedido.setUsuario(usuario);
         
         Pedido pedidoGuardado = pedidoRepository.save(pedido);
-        
+
+
         // Guardar detalles del pedido
         if (pedidoDTO.getDetallePedido() != null && !pedidoDTO.getDetallePedido().isEmpty()) {
             for (DetallePedidoDTO detalleDTO : pedidoDTO.getDetallePedido()) {
@@ -53,7 +56,7 @@ public class PedidoServicio {
                 
                 DetallePedido detalle = new DetallePedido();
                 detalle.setCantidad(detalleDTO.getCantidad());
-                detalle.setSubtotal(detalleDTO.getSubtotal());
+                detalle.setSubtotal(detalleDTO.getCantidad() * plato.getPrecio());
                 detalle.setComentario(detalleDTO.getComentario());
                 detalle.setPedido(pedidoGuardado);
                 detalle.setPlato(plato);
@@ -111,7 +114,18 @@ public class PedidoServicio {
         pedido.setFechaEliminado(LocalDateTime.now());
         pedidoRepository.save(pedido);
         return true;
+
+
     }
+
+    // 8. Listar solo pedidos activos
+    public List<PedidoDTO> listarPedidosActivos() {
+        return pedidoRepository.findByEstadoTrue()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
     // 6. Buscar por estados
     public List<PedidoDTO> buscarPorEstado(String estado) {
@@ -120,6 +134,15 @@ public class PedidoServicio {
             .map(this::toDTO)
             .collect(Collectors.toList());
     }
+
+    // 7. Buscar pedidos por usuario
+    public List<PedidoDTO> buscarPedidosPorUsuario(Long idUsuario) {
+        List<Pedido> pedidos = pedidoRepository.findByUsuario_IdusuarioAndEstadoTrue(idUsuario);
+        return pedidos.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
     // Método para convertir entidad a DTO
     private PedidoDTO toDTO(Pedido pedido) {
@@ -138,7 +161,7 @@ public class PedidoServicio {
         dto.setUsuario(pedido.getUsuario().getNombre() + " " + pedido.getUsuario().getApellido());
     }
 
-    // ✅ Obtener y mapear los detalles del pedido
+    // Obtener y mapear los detalles del pedido
     List<DetallePedido> detalles = detallePedidoRepository.findByPedido(pedido);
     List<DetallePedidoDTO> detalleDTOs = detalles.stream().map(det -> {
         DetallePedidoDTO detalleDTO = new DetallePedidoDTO();

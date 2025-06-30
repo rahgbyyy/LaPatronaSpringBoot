@@ -12,5 +12,12 @@ import com.lapatronaspring.lapatronaspring.models.Usuario;
 public interface PedidoRepository extends JpaRepository<Pedido,Long>{
 
     List<Pedido> findByEstadoPedido(String estado);
+    List<Pedido> findByUsuario_Idusuario(Long idUsuario);
+    List<Pedido> findByEstadoTrue();
+    List<Pedido> findByUsuario_IdusuarioAndEstadoTrue(Long idUsuario);
+
+
+
+
 
 }

@@ -56,6 +56,14 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
+    // Listar todos los pedidos
+    @GetMapping("/lista")
+    public ResponseEntity<List<PedidoDTO>> listarPedidosActivos() {
+        List<PedidoDTO> pedidos = pedidoServicio.listarPedidosActivos();
+        return ResponseEntity.ok(pedidos);
+    }
+
+
     // Cambiar el estado del pedido (por ejemplo: PENDIENTE, EN PREPARACIÓN, ENTREGADO)
     @PatchMapping("/{id}/estado")
     public ResponseEntity<ResponseCommonDTO> cambiarEstado(@PathVariable Long id, @RequestBody EstadoRequest estadoRequest) {
@@ -91,6 +99,19 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
+    // Buscar pedidos por ID de usuario
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<?> buscarPedidosPorUsuario(@PathVariable Long idUsuario) {
+        try {
+            List<PedidoDTO> pedidos = pedidoServicio.buscarPedidosPorUsuario(idUsuario);
+            return ResponseEntity.ok(pedidos);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseCommonDTO(false, ex.getMessage()));
+        }
+    }
+
+
     // Clase interna para deserializar el cambio de estado
     public static class EstadoRequest {
         private String estadoPedido;
@@ -103,4 +124,6 @@ public class PedidoController {
             this.estadoPedido = estadoPedido;
         }
     }
+
+
 }
