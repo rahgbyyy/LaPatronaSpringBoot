@@ -148,6 +148,30 @@ public class PedidoServicio {
     }
 
 
+public List<PedidoDTO> obtenerPedidosDuranteCajaAbierta(Long idUsuario) {
+    Optional<Caja> cajaAbierta = cajaRepositorio.findFirstByFechaCierreIsNullOrderByFechaInicioDesc();
+    
+    if (cajaAbierta.isEmpty()) {
+        throw new RuntimeException("No hay caja abierta actualmente");
+    }
+    
+    LocalDateTime fechaApertura = cajaAbierta.get().getFechaInicio();
+    
+    List<Pedido> pedidos;
+    if (idUsuario != null) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        pedidos = pedidoRepository.findByUsuarioAndEstadoTrueAndFechaRegistroGreaterThanEqual(
+            usuario, fechaApertura);
+    } else {
+        pedidos = pedidoRepository.findByEstadoTrueAndFechaRegistroGreaterThanEqual(fechaApertura);
+    }
+    
+    return pedidos.stream()
+        .map(this::toDTO)
+        .collect(Collectors.toList());
+}
+
  public List<PedidoDTO> obtenerPedidosEntregadosDuranteCajaAbierta() {
     // 1. Obtener la caja abierta actual
     Optional<Caja> cajaAbierta = cajaRepositorio.findFirstByFechaCierreIsNullOrderByFechaInicioDesc();

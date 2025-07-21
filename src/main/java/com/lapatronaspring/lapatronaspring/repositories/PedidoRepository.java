@@ -19,5 +19,10 @@ public interface PedidoRepository extends JpaRepository<Pedido,Long>{
 List<Pedido> findByEstadoTrueAndEstadoPedidoAndFechaRegistroGreaterThanEqual(String estadoPedido, LocalDateTime fechaRegistro);
     List<Pedido> findByEstadoTrueAndEstadoPedidoAndFechaRegistroBetween(String estadoPedido, LocalDateTime fechaInicio, LocalDateTime fechaFin);
 Optional<Pedido> findByIdPedidoAndEstadoTrue(Long idPedido);
-
+    List<Pedido> findByEstadoTrueAndFechaRegistroGreaterThanEqual(LocalDateTime fechaRegistro);
+    List<Pedido> findByUsuarioAndEstadoTrueAndFechaRegistroGreaterThanEqual(
+        Usuario usuario, LocalDateTime fechaRegistro);
+    
+    
+    
 }

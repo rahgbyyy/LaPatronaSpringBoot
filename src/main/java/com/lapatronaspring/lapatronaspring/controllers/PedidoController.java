@@ -122,6 +122,18 @@ public ResponseEntity<?> obtenerPedidoPorId(@PathVariable Long idPedido) {
     }
 }
 
+@GetMapping("/caja-abierta")
+public ResponseEntity<?> obtenerPedidosDuranteCajaAbierta(
+    @RequestParam(required = false) Long idUsuario) {
+    
+    try {
+        List<PedidoDTO> pedidos = pedidoServicio.obtenerPedidosDuranteCajaAbierta(idUsuario);
+        return ResponseEntity.ok(pedidos);
+    } catch (RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ResponseCommonDTO(false, ex.getMessage()));
+    }
+}
 
   @GetMapping("/entregados-caja-abierta")
     public ResponseEntity<?> obtenerPedidosEntregadosDuranteCajaAbierta() {
