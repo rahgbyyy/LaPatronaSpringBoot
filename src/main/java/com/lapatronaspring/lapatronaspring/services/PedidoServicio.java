@@ -5,7 +5,8 @@ import com.lapatronaspring.lapatronaspring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,9 @@ public class PedidoServicio {
     @Autowired
     private PlatoRepositorio platoRepository;
 
+@Autowired
+    private CajaRepositorio cajaRepositorio;
+
 
 
     // 1. Crear pedido
@@ -40,8 +44,8 @@ public class PedidoServicio {
         pedido.setEstado(true);
         pedido.setEstadoPedido("ENVIADO"); // Estado inicial
         pedido.setMonto(pedidoDTO.getMonto());
-        pedido.setFechaRegistro(LocalDateTime.now());
-        pedido.setUltModificacion(LocalDateTime.now());
+        pedido.setFechaRegistro(LocalDateTime.now(ZoneId.systemDefault()));
+        pedido.setUltModificacion(LocalDateTime.now(ZoneId.systemDefault()));
         pedido.setNombreCliente(pedidoDTO.getCliente());
         pedido.setUsuario(usuario);
         
@@ -144,6 +148,31 @@ public class PedidoServicio {
     }
 
 
+ public List<PedidoDTO> obtenerPedidosEntregadosDuranteCajaAbierta() {
+    // 1. Obtener la caja abierta actual
+    Optional<Caja> cajaAbierta = cajaRepositorio.findFirstByFechaCierreIsNullOrderByFechaInicioDesc();
+    
+    if (cajaAbierta.isEmpty()) {
+        throw new RuntimeException("No hay caja abierta actualmente");
+    }
+    
+    LocalDateTime fechaApertura = cajaAbierta.get().getFechaInicio();
+    
+    // 2. Buscar pedidos entregados desde la apertura de la caja
+    List<Pedido> pedidos = pedidoRepository.findByEstadoTrueAndEstadoPedidoAndFechaRegistroGreaterThanEqual(
+        "ENTREGADO", fechaApertura);
+    
+    // 3. Convertir a DTOs - FIXED HERE
+    return pedidos.stream()
+        .map(this::toDTO) // Using the existing toDTO method
+        .collect(Collectors.toList());
+}
+ public PedidoDTO obtenerPedidoPorId(Long idPedido) {
+        Pedido pedido = pedidoRepository.findByIdPedidoAndEstadoTrue(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado o está inactivo"));
+        return toDTO(pedido);
+    }
+
     // Método para convertir entidad a DTO
     private PedidoDTO toDTO(Pedido pedido) {
     PedidoDTO dto = new PedidoDTO();
@@ -160,6 +189,8 @@ public class PedidoServicio {
         dto.setIdUsuario(pedido.getUsuario().getIdusuario());
         dto.setUsuario(pedido.getUsuario().getNombre() + " " + pedido.getUsuario().getApellido());
     }
+
+
 
     // Obtener y mapear los detalles del pedido
     List<DetallePedido> detalles = detallePedidoRepository.findByPedido(pedido);

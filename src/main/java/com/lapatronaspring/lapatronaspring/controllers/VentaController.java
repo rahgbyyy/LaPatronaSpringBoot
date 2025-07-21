@@ -3,6 +3,9 @@ package com.lapatronaspring.lapatronaspring.controllers;
 import com.lapatronaspring.lapatronaspring.models.ResponseCommonDTO;
 import com.lapatronaspring.lapatronaspring.models.VentaDTO;
 import com.lapatronaspring.lapatronaspring.services.VentaServicio;
+import java.util.Map;
+import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,4 +49,19 @@ public class VentaController {
         ResponseCommonDTO response = new ResponseCommonDTO(false, "No se pudo editar la venta");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+
+// In VentaController.java
+
+@GetMapping("/totales-por-metodo-pago")
+public ResponseEntity<Map<String, Double>> obtenerTotalesPorMetodoPago() {
+    Map<String, Double> totales = ventaServicio.obtenerTotalesPorMetodoPago();
+    return ResponseEntity.ok(totales);
+}
+
+@GetMapping("/totales-cajas-simples")
+public ResponseEntity<Map<String, Double>> obtenerTotalesCajasSimples() {
+    Map<String, Double> totales = ventaServicio.obtenerTotalesCajasSimples();
+    return ResponseEntity.ok(totales);
+}
 }

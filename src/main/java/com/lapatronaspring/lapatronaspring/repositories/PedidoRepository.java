@@ -18,8 +18,6 @@ public interface PedidoRepository extends JpaRepository<Pedido,Long>{
     List<Pedido> findByUsuario_IdusuarioAndEstadoTrue(Long idUsuario);
 List<Pedido> findByEstadoTrueAndEstadoPedidoAndFechaRegistroGreaterThanEqual(String estadoPedido, LocalDateTime fechaRegistro);
     List<Pedido> findByEstadoTrueAndEstadoPedidoAndFechaRegistroBetween(String estadoPedido, LocalDateTime fechaInicio, LocalDateTime fechaFin);
-
-
-
+Optional<Pedido> findByIdPedidoAndEstadoTrue(Long idPedido);
 
 }

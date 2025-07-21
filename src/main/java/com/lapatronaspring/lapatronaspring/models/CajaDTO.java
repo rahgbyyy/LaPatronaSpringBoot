@@ -1,5 +1,6 @@
 package com.lapatronaspring.lapatronaspring.models;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.ZoneId;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +11,8 @@ public class CajaDTO {
     private Double monto;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaCierre;
+
+
 
     public Long getIdCaja() {
         return idCaja;

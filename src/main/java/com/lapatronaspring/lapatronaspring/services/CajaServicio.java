@@ -4,7 +4,8 @@ import com.lapatronaspring.lapatronaspring.models.*;
 import com.lapatronaspring.lapatronaspring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +52,10 @@ public class CajaServicio {
     public ResponseCommonDTO saveItem(CajaDTO pItem) {
         try {
             Caja nuevaCaja = new Caja();
-            nuevaCaja.setFechaInicio(pItem.getFechaInicio() != null ? pItem.getFechaInicio() : LocalDateTime.now());
-            nuevaCaja.setFechaCierre(pItem.getFechaCierre());
+nuevaCaja.setFechaInicio(pItem.getFechaInicio() != null ? 
+                pItem.getFechaInicio() : 
+                LocalDateTime.now(ZoneId.systemDefault()));
+                            nuevaCaja.setFechaCierre(pItem.getFechaCierre());
             nuevaCaja.setMonto(pItem.getMonto());
             
             cajaRepositorio.save(nuevaCaja);

@@ -1,5 +1,6 @@
 package com.lapatronaspring.lapatronaspring.models;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.ZoneId;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +19,8 @@ public class PedidoDTO {
     private String usuario;
     private String cliente;
     private List<DetallePedidoDTO> detallePedido;
+
+
 
     public Long getIdPedido() {
         return idPedido;

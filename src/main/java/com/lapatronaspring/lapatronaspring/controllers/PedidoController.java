@@ -111,6 +111,28 @@ public class PedidoController {
         }
     }
 
+@GetMapping("/{idPedido}")
+public ResponseEntity<?> obtenerPedidoPorId(@PathVariable Long idPedido) {
+    try {
+        PedidoDTO pedido = pedidoServicio.obtenerPedidoPorId(idPedido);
+        return ResponseEntity.ok(pedido);
+    } catch (RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseCommonDTO(false, ex.getMessage()));
+    }
+}
+
+
+  @GetMapping("/entregados-caja-abierta")
+    public ResponseEntity<?> obtenerPedidosEntregadosDuranteCajaAbierta() {
+        try {
+            List<PedidoDTO> pedidos = pedidoServicio.obtenerPedidosEntregadosDuranteCajaAbierta();
+            return ResponseEntity.ok(pedidos);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ResponseCommonDTO(false, ex.getMessage()));
+        }
+    }
 
     // Clase interna para deserializar el cambio de estado
     public static class EstadoRequest {
